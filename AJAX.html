@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AJAX</title>
+</head>
+<body>
+<input type="text" name="haku" id="hakuteksti">
+<button id="haku">hae</button>
+<figure>
+    <img>
+    <figcaption></figcaption>
+</figure>
+
+<ul>
+
+</ul>
+
+<script>
+    document.getElementById('haku').onclick = function() {
+        const kysely = document.getElementById('hakuteksti').value;
+        fetch('http://api.tvmaze.com/search/shows?q=' + kysely).then(function(vastaus) {
+            return vastaus.json();
+        }).then(function(json) {
+            naytaKuva(json);
+        }).catch(function(error) {
+            console.log(error);
+        });
+
+        function naytaKuva(ohjelmat) {
+            console.log(ohjelmat);
+            const kuvat = [
+                ohjelmat[0].show.name,
+                ohjelmat[0].show.officialSite,
+                ohjelmat[0].show.image.medium,
+                ohjelmat[0].show.summary,
+                ohjelmat[0].show.genres,
+            ];
+
+            const lista = document.querySelector('ul');
+
+            const li = document.createElement('li');
+            const img = document.createElement('img');
+            img.src = kuvat[2];
+            li.appendChild(img);
+
+            li.innerHTML += kuvat[0] + "<br/>" + kuvat[1] + "<br/>" + kuvat[3] + "<br/>" + kuvat[4];
+
+
+            lista.appendChild(li);
+
+        }
+    };
+</script>
+</body>
+</html>
